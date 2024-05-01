@@ -107,11 +107,10 @@ export default function Page({ data = [] }) {
               <a
                 target="_blank"
                 rel="noreferrer"
-                href="https://github.com/maqi1520/mdx-editor/releases"
+                href="/dashboard"
                 className={buttonVariants({ size: 'lg' })}
               >
-                <DownloadIcon className="w-5 h-5" />
-                <span>下载桌面版</span>
+                <span>Dashboard</span>
               </a>
             </div>
           </div>
