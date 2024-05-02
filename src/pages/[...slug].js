@@ -19,17 +19,15 @@ export default function App({...props }) {
   }
   const [initialContent, setContent] = useState(props.initialContent)
   const id = props.initialContent?.ID || 'content'
-  
-  if (isEditPage) {
-    useEffect(() => {
-      try {
+  useEffect(() => {
+    try {
         const data = JSON.parse(localStorage.getItem(id))
         if (data) {
           setContent(data)
         }
       } catch (error) {}
-    }, [id])
-  }
+  }, [id])
+  
 
   return (
     <>
