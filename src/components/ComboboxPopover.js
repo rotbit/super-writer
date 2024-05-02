@@ -1,9 +1,11 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
+import { use, useState } from "react"
+import {platforms, worktypes} from "@/lib/constants" 
+import { ReloadIcon } from "@radix-ui/react-icons"
 import { useRouter } from 'next/router';
-import { createTask } from "../lib/task";
+import { postData } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -51,18 +53,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-const platforms = [
-  { label: "微信公众号", value: "wechat" },
-  { label: "掘金社区", value: "juejin" },
-  { label: "知乎", value: "zhihu" },
-  { label: "Medium", value: "medium" },
-]
-
-const worktypes = [
-  { label: "根据昵称采集", value: "by_author" },
-  { label: "根据关键字采集", value: "by_keyword" },
-]
-
 
 const formSchema = z.object({
   platform: z.string({
@@ -83,8 +73,9 @@ export default function ComboboxForm() {
   const [isOpenPlatform, setIsOpenPlatform] = useState(false)
   const [isOpenWorkType, setIsOpenWorkType] = useState(false)
   const [workType, setWorkType] = useState("")
-
+  const [submitMessage, setSubmitMessage] = useState("")
   const router = useRouter();
+  const [clicked, setClicked] = useState(false)
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -94,10 +85,25 @@ export default function ComboboxForm() {
     }
   })
 
-  function onSubmit(data) {
-    // TODO 完善逻辑
-    createTask(data);
-    router.reload();
+  async function onSubmit(data) {
+    setClicked(true);
+    const platform = data['platform'];
+    const work_type = data['worktype'];
+    const search_param = work_type === "by_author" ? data["author"]:data["keyword"];
+    
+    let body = {
+      platform: platform,
+      work_type: work_type,
+      search_param: search_param
+    }
+
+    const rsp = await postData("/api/create_task", body);   
+    if (rsp.message === "success") {
+      router.reload();
+    } else {
+      setSubmitMessage(rsp.message)
+      setClicked(false);
+    }
   }
 
   return (
@@ -273,15 +279,27 @@ export default function ComboboxForm() {
                             )}
                           />
                         )
-
                       }
-                      <Button type="submit">Submit</Button>
+                      {
+                        clicked ? (
+                          <Button disabled>
+                            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                            已发送
+                          </Button>
+                        ) : (
+                          <Button type="submit">Submit</Button>
+                        )
+                      }
                     </form>
                   </Form>
                 </div>
               </CardContent>
-              <CardFooter
-              >
+              <CardFooter>
+              <span className="text-red-500">
+              {
+                submitMessage
+              }
+              </span>
               </CardFooter>
             </Card>
           </DialogDescription>

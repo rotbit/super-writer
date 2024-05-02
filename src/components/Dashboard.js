@@ -1,5 +1,8 @@
 import * as React from "react"
+import { useEffect,useState } from "react"
 import Link from "next/link"
+import {getData} from "@/lib/utils"
+import { getPlatformLabel, getWorkTypesLabel } from "../lib/constants"
 import ComboboxPopover from "@/components/ComboboxPopover"
 import {
   Home,
@@ -50,6 +53,24 @@ import {
 } from "@/components/ui/tooltip"
 
 export default function Dashboard() {
+  const [datas, setDatas] = useState(null);
+  useEffect(() => {
+    const fetchdata = async () => {
+    const response = await getData("/api/task_list")
+    const datas = await response.data;
+    setDatas(datas);
+   };
+   fetchdata();
+  }, []);
+
+
+  const handleDetail = function(id) {
+    console.log("detail id=", id);
+  }
+  const handleDelete = function(id) {
+    console.log("delete id=", id);
+  }
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -179,25 +200,72 @@ export default function Dashboard() {
                           <TableHead className="text-center hidden sm:table-cell">
                             状态
                           </TableHead>
-                          <TableHead className="hidden sm:table-cell">
+                          <TableHead className="text-center hidden sm:table-cell">
                             平台类型
                           </TableHead>
-                          <TableHead className="hidden sm:table-cell">
+                          <TableHead className="text-center hidden sm:table-cell">
                             采集方式
                           </TableHead>
-                          <TableHead className="hidden md:table-cell">
+                          <TableHead className="text-center hidden md:table-cell">
                             关键字|作者
                           </TableHead>
-                          <TableHead className="hidden md:table-cell">
+                          <TableHead className="text-center hidden md:table-cell">
                             创建时间
                           </TableHead>
-                          <TableHead className="hidden md:table-cell">
+                          <TableHead className="text-center hidden md:table-cell">
                             结束时间
                           </TableHead>
                           <TableHead className="text-center">操作</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
+                        {
+                          datas != null && datas.map((data, key) => (
+                            <TableRow key={key} >
+                              <TableCell>
+                                <div className="font-medium">{data.id}</div>
+                              </TableCell>
+                              <TableCell  className="text-center hidden sm:table-cell">
+                                <div className="hidden text-sm text-muted-foreground md:inline">
+                                    <Badge 
+                                      className="text-xs" 
+                                      variant= {(data.status == 0 ? "secondary" : "destructive")}>
+                                      {
+                                        data.status == 0 ? ("已结束") : ("运行中")
+                                      }
+                                    </Badge>
+                                  </div>
+                              </TableCell>
+                              <TableCell className="text-center hidden sm:table-cell">
+                                {
+                                  getPlatformLabel(data.platform)
+                                }
+                              </TableCell>
+                              <TableCell className="text-center hidden sm:table-cell">
+                                  {getWorkTypesLabel(data.work_type)}
+                              </TableCell>
+                              <TableCell className="hidden md:table-cell">
+                                {
+                                  data.search_param
+                                }
+                              </TableCell>
+                              <TableCell className="hidden md:table-cell">
+                                {
+                                  data.created_at
+                                }
+                              </TableCell>
+                              <TableCell className="hidden md:table-cell">
+                                {
+                                  data.finished_at
+                                }
+                              </TableCell>
+                              <TableCell className="text-center">
+                                <Button variant="link" onClick={() => handleDetail(data.id)}>详情</Button>
+                                <Button variant="link" onClick={() => handleDelete(data.id)}>删除</Button>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        }
                         {/* <TableRow>
                           <TableCell>
                             <div className="font-medium">Liam Johnson</div>
@@ -218,42 +286,6 @@ export default function Dashboard() {
                           </TableCell>
                           <TableCell className="text-right">$250.00</TableCell>
                         </TableRow> */}
-                        <TableRow>
-                          <TableCell>
-                            <div className="font-medium">Noah Williams</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              noah@example.com
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-center hidden sm:table-cell">
-                            <div className=" hidden text-sm text-muted-foreground md:inline">
-                                <Badge className="text-xs" variant="secondary">
-                                  运行中
-                                </Badge>
-                              </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Subscription
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="secondary">
-                              Fulfilled
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-25
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-25
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-25
-                          </TableCell>
-                          <TableCell className="text-center">
-                            <Button variant="link">详情</Button>
-                            <Button  variant="link">删除</Button>
-                          </TableCell>
-                        </TableRow>
                       </TableBody>
                     </Table>
                   </CardContent>
