@@ -21,8 +21,6 @@ import {
 import {
   Card,
   CardContent,
-  CardFooter,
-  CardHeader,
 } from "@/components/ui/card"
 import {
   DropdownMenu,
@@ -51,17 +49,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-
-
-export default function Dashboard() {  
+export default function Dashboard() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -89,20 +77,20 @@ export default function Dashboard() {
           </TooltipProvider>
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                href="#"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-              >
-                <Settings className="h-5 w-5" />
-                <span className="sr-only">Settings</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Settings</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="#"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                >
+                  <Settings className="h-5 w-5" />
+                  <span className="sr-only">Settings</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">Settings</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </nav>
       </aside>
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -178,29 +166,7 @@ export default function Dashboard() {
             <Tabs defaultValue="week">
               <div className="flex items-center">
                 <div className="ml-auto flex items-center gap-2">
-                  <Dialog>
-                    <DialogTrigger>
-                      <Button size="lg" variant="default" className="h-7 gap-1 text-sm">
-                        新建
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>新建任务</DialogTitle>
-                        <DialogDescription>
-                          <Card>
-                            <CardHeader></CardHeader>
-                            <CardContent>
-                              <ComboboxPopover />
-                            </CardContent>
-                            <CardFooter
-                            >
-                            </CardFooter>
-                          </Card>
-                        </DialogDescription>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
+                  <ComboboxPopover />
                 </div>
               </div>
               <TabsContent value="week">
@@ -209,60 +175,29 @@ export default function Dashboard() {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>任务名</TableHead>
-                          <TableHead className="hidden sm:table-cell">
-                            执行状态
+                          <TableHead>任务ID</TableHead>
+                          <TableHead className="text-center hidden sm:table-cell">
+                            状态
                           </TableHead>
                           <TableHead className="hidden sm:table-cell">
-                            开始时间
+                            平台类型
+                          </TableHead>
+                          <TableHead className="hidden sm:table-cell">
+                            采集方式
+                          </TableHead>
+                          <TableHead className="hidden md:table-cell">
+                            关键字|作者
+                          </TableHead>
+                          <TableHead className="hidden md:table-cell">
+                            创建时间
                           </TableHead>
                           <TableHead className="hidden md:table-cell">
                             结束时间
                           </TableHead>
-                          <TableHead className="text-right">操作</TableHead>
+                          <TableHead className="text-center">操作</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        <TableRow className="bg-accent">
-                          <TableCell>
-                            <div className="font-medium">Liam Johnson</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              liam@example.com
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Sale
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="secondary">
-                              Fulfilled
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-23
-                          </TableCell>
-                          <TableCell className="text-right">$250.00</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <div className="font-medium">Olivia Smith</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              olivia@example.com
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Refund
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="outline">
-                              Declined
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-24
-                          </TableCell>
-                          <TableCell className="text-right"></TableCell>
-                        </TableRow>
                         {/* <TableRow>
                           <TableCell>
                             <div className="font-medium">Liam Johnson</div>
@@ -290,6 +225,13 @@ export default function Dashboard() {
                               noah@example.com
                             </div>
                           </TableCell>
+                          <TableCell className="text-center hidden sm:table-cell">
+                            <div className=" hidden text-sm text-muted-foreground md:inline">
+                                <Badge className="text-xs" variant="secondary">
+                                  运行中
+                                </Badge>
+                              </div>
+                          </TableCell>
                           <TableCell className="hidden sm:table-cell">
                             Subscription
                           </TableCell>
@@ -301,87 +243,16 @@ export default function Dashboard() {
                           <TableCell className="hidden md:table-cell">
                             2023-06-25
                           </TableCell>
-                          <TableCell className="text-right">$350.00</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <div className="font-medium">Emma Brown</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              emma@example.com
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Sale
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="secondary">
-                              Fulfilled
-                            </Badge>
+                          <TableCell className="hidden md:table-cell">
+                            2023-06-25
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            2023-06-26
+                            2023-06-25
                           </TableCell>
-                          <TableCell className="text-right">$450.00</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <div className="font-medium">Liam Johnson</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              liam@example.com
-                            </div>
+                          <TableCell className="text-center">
+                            <Button variant="link">详情</Button>
+                            <Button  variant="link">删除</Button>
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Sale
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="secondary">
-                              Fulfilled
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-23
-                          </TableCell>
-                          <TableCell className="text-right">$250.00</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <div className="font-medium">Olivia Smith</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              olivia@example.com
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Refund
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="outline">
-                              Declined
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-24
-                          </TableCell>
-                          <TableCell className="text-right">$150.00</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <div className="font-medium">Emma Brown</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              emma@example.com
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Sale
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="secondary">
-                              Fulfilled
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-26
-                          </TableCell>
-                          <TableCell className="text-right">$450.00</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
